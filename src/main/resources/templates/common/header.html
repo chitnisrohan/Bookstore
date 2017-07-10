@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 
 <head th:fragment="common-header">
     <meta charset="utf-8" />
@@ -49,8 +49,10 @@
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li><a href="#">Shopping Cart</a></li>
-                    <li><a th:href="@{/login}">My Account</a></li>
-                    <li><a href="#">Logout</a></li>
+                    <!-- This is combination of thymeleaf spring security and spring boot -->
+                    <li><a sec:authorize="isAnonymous()" th:href="@{/login}">My Account</a></li>
+                    <li><a sec:authorize="isAuthenticated()" th:href="@{/myProfile}">My Profile</a></li>
+                    <li><a sec:authorize="isAuthenticated()" href="@{/logout}">Logout</a></li>
                 </ul>
             </div>
             <!--/.nav-collapse -->

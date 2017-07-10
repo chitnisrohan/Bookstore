@@ -8,4 +8,5 @@ import com.bookstore.domain.User;
 //  so we added this method so that spring boot will realize this method and knows we pass username and it will return user for us.
 public interface UserRepository extends CrudRepository<User, Long> {
 	User findByUsername(String username);
+	User findByEmail(String email);
 }
