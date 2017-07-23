@@ -39,7 +39,7 @@ public class User implements UserDetails{
 
 //	If the relationship is bidirectional, the mappedBy element must be used to specify the relationship field or property of the entity that is the owner of the relationship.
 //  The OneToMany annotation may be used within an embeddable class contained within an entity class to specify a relationship to a collection of entities. If the relationship is bidirectional, the mappedBy element must be used to specify the relationship field or property of the entity that is the owner of the relationship.
-//	cascadeType ALL means - whether operation is propogated to chain of this mapping. here, Mapping between users and roles. i.e. If we work on this user object and is userRoles property changes, then changes will be propogated to userRoles DB as well. and ALL means all operations will be propogated
+//	cascadeType ALL means - whether operation is propogated to chain of this mapping. here, Mapping between users and roles. i.e. If we work on this user object and if userRoles property changes, then changes will be propogated to userRoles DB as well. and ALL means all operations will be propogated
 	@OneToMany(mappedBy="user", cascade=CascadeType.ALL, fetch=FetchType.EAGER)
 //	to break loop in case of serialization and deserialization
 	@JsonIgnore

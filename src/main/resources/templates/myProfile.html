@@ -15,7 +15,7 @@
 				<h2 class="section-headline">
 <!-- 				At this point we know user has logged in and user attribute is set to the logged in user  -->
 <!-- 				i.e. we have user entity in the current context  -->
-					<span th:text="${#strings.toUpperCase{user.username}}">User Account</span>
+					<span th:text="${#strings.toUpperCase(user.username)}">User Account</span>
 				</h2>
 			</div>
 			<div class="col-xs-4">

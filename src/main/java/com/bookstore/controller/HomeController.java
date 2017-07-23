@@ -8,6 +8,7 @@ import java.util.UUID;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.bookstore.domain.User;
@@ -25,6 +27,7 @@ import com.bookstore.domain.security.Role;
 import com.bookstore.domain.security.UserRole;
 import com.bookstore.service.UserService;
 import com.bookstore.service.impl.UserSecurityService;
+import com.bookstore.utility.MailConstructor;
 import com.bookstore.utility.SecurityUtility;
 
 @Controller
@@ -54,28 +57,60 @@ public class HomeController {
 	}
 	
 	@RequestMapping("/forgetPassword")
-	public String forgetPassword(Model model) {
+	public String forgetPassword(
+			HttpServletRequest request,
+			@ModelAttribute("email") String userEmail,
+			Model model
+			) {
+		
 		model.addAttribute("classActiveForgetPassword", true);
+		User user = userService.findByEmail(userEmail);
+		if(user == null) {
+			model.addAttribute("emailNotExists",true);
+			return "myAccount";
+		}
+		
+		userService.save(user);
+		
+		String password = SecurityUtility.randomPassword();
+		
+		String encryptedPassword = SecurityUtility.passwordEncoder().encode(password);
+		user.setPassword(encryptedPassword);
+		
+		String token = UUID.randomUUID().toString();
+		userService.createPasswordResetTokenForUser(user, token);
+		
+		String appUrl = "http://"+request.getServerName()+":"+request.getServerPort()+request.getContextPath();
+		
+		SimpleMailMessage email = mailConstructor.constructResetTokenEmail(appUrl, request.getLocale(), token, user, password);
+		
+		mailSender.send(email);
+		
+		model.addAttribute("forgetPasswordEmailSent", "true");
+		
 		return "myAccount";
 	}
 
-	@RequestMapping(value="/newUser", method=org.springframework.web.bind.annotation.RequestMethod.POST)
+	@RequestMapping(value="/newUser", method = RequestMethod.POST)
 	public String newUserPost(
 			HttpServletRequest request,
 			@ModelAttribute("email") String userEmail,
 			@ModelAttribute("username") String username,
-			Model model) throws Exception {
+			Model model
+			) throws Exception{
 		model.addAttribute("classActiveNewAccount", true);
 		model.addAttribute("email", userEmail);
 		model.addAttribute("username", username);
 		
-		if(userService.findByUsername(username) != null) {
+		if (userService.findByUsername(username) != null) {
 			model.addAttribute("usernameExists", true);
+			
 			return "myAccount";
 		}
 		
-		if(userService.findByEmail(userEmail) != null) {
+		if (userService.findByEmail(userEmail) != null) {
 			model.addAttribute("emailExists", true);
+			
 			return "myAccount";
 		}
 		
@@ -84,16 +119,15 @@ public class HomeController {
 		user.setEmail(userEmail);
 		
 		String password = SecurityUtility.randomPassword();
+		
 		String encryptedPassword = SecurityUtility.passwordEncoder().encode(password);
 		user.setPassword(encryptedPassword);
 		
 		Role role = new Role();
 		role.setRoleId(1);
 		role.setName("ROLE_USER");
-		
 		Set<UserRole> userRoles = new HashSet<>();
 		userRoles.add(new UserRole(user, role));
-		
 		userService.createUser(user, userRoles);
 		
 		String token = UUID.randomUUID().toString();
@@ -108,11 +142,7 @@ public class HomeController {
 		model.addAttribute("emailSent", "true");
 		
 		return "myAccount";
-
-		
-		return "/newUser";
-	}
-	
+	}	
 	
 //	User fills his information to create new account. and clicks create new account button. now we mail user security token.
 //	user opens his email and clicks on the link to validate his email-id. now we come to this path (/newUser) and we are going to
@@ -140,6 +170,7 @@ public class HomeController {
 		Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, userDetails.getPassword(), userDetails.getAuthorities());
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 
+		model.addAttribute("user", user);
 		model.addAttribute("classActiveEdit", true);
 		return "myProfile";
 	}

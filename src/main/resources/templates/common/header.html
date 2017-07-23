@@ -52,7 +52,7 @@
                     <!-- This is combination of thymeleaf spring security and spring boot -->
                     <li><a sec:authorize="isAnonymous()" th:href="@{/login}">My Account</a></li>
                     <li><a sec:authorize="isAuthenticated()" th:href="@{/myProfile}">My Profile</a></li>
-                    <li><a sec:authorize="isAuthenticated()" href="@{/logout}">Logout</a></li>
+                    <li><a sec:authorize="isAuthenticated()" th:href="@{/logout}">Logout</a></li>
                 </ul>
             </div>
             <!--/.nav-collapse -->

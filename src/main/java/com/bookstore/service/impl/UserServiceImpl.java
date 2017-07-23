@@ -2,6 +2,8 @@ package com.bookstore.service.impl;
 
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +27,8 @@ public class UserServiceImpl implements UserService{
 	
 	@Autowired
 	private UserRepository userRepository;
+	
+	private static final Logger LOG = LoggerFactory.getLogger(UserService.class); 
 
 	@Override
 	public void createPasswordResetTokenForUser(final User user, final String token) {
@@ -51,7 +55,7 @@ public class UserServiceImpl implements UserService{
 	public User createUser(User user, Set<UserRole> userRoles) throws Exception{
 		User user1 = userRepository.findByUsername(user.getUsername());
 		if(user1 != null) {
-			throw new Exception("User already Exists !");
+			LOG.info("user {} already exists", user.getUsername());
 		} else {
 			for (UserRole ur : userRoles) {
 				roleRepository.save(ur.getRole());
@@ -62,5 +66,10 @@ public class UserServiceImpl implements UserService{
 		}
 		
 		return user1;
+	}
+	
+	@Override
+	public User save(User user) {
+		return userRepository.save(user);
 	}
 }
