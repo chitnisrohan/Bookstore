@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="common/header :: common-header" />
+
+<body>
+
+    <div th:replace="common/header :: navbar">
+    </div>
+
+    <div class="container" id="rc-body-container">
+
+		<div class="row" style="margin-bottom: -100px;">
+			<div class="col-xs-8">
+				<h2 class="section-headline">
+<!-- 				At this point we know user has logged in and user attribute is set to the logged in user  -->
+<!-- 				i.e. we have user entity in the current context  -->
+					<span th:text="${user}? ${#strings.toUpperCase(user.getUsername())} : 'All Books'">User Account</span>
+				</h2>
+			</div>
+			<div class="col-xs-4">
+				<img src="/images/bookstore_logo.jpg" class="img-responsive" />
+			</div>
+		</div>
+		
+			<div class="row" style="margin-top: 100px;">
+			<div class="col-xs-9">
+				<div th:if="${emptyList}">
+					<h5 style="font-style: italic;">No books available. Please try again later.</h5>
+				</div>
+				
+				<table border="0" id="bookList">
+					<thead>
+						<tr>
+							<th></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr class="book-item" data-th-each="book : ${bookList}" >
+							<td>
+								<div th:if="${book != null}">
+									<div class="row" style="margin-bottom: 50px;">
+										<div class="col-xs-3">
+											<a th:href="@{/bookDetail?id=}+${book.id}"><img 
+												class="img-responsive shelf-book"
+												th:src="#{adminPath}+@{/images/book/}+${book.id}+'.png'" /></a>
+										</div>
+										<div class="col-xs-9" >
+											<a th:href="@{/bookDetail?id=}+${book.id}">
+											<h4 th:text="${book.title}"></h4>
+											</a> 
+											<span
+												th:text="${book.publicationDate}"></span>
+											<p th:text="${book.author}"></p>
+											<a th:href="@{/bookDetail?id=}+${book.id}"><span
+												th:text="${#strings.capitalize(book.format)}"></span></a> <span
+												th:text="${book.numberOfPages}"><span> pages</span></span><br />
+
+											<a th:href="@{/bookDetail?id=}+${book.id}"><span
+												style="font-size: x-large; color: #db3208;">$<span
+													th:text="${#numbers.formatDecimal(book.ourPrice, 0 , 'COMMA', 2, 'POINT')}"></span></span></a>
+
+											<span style="text-decoration: line-through;">$<span
+												th:text="${#numbers.formatDecimal(book.listPrice, 0 , 'COMMA', 2, 'POINT')}"></span></span>
+
+											<p th:utext="${#strings.abbreviate(book.description, 1000)}"></p>
+										</div>
+									</div>
+								</div>
+							</td>
+						</tr>					
+					</tbody>
+					</table>
+			
+			</div>
+			</div>
+    </div>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <div th:replace="common/header :: body-bottom-scripts"></div>
+</body>
+
+</html>

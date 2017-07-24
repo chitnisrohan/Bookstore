@@ -1,5 +1,6 @@
 package com.bookstore.controller;
 
+import java.util.List;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
@@ -21,17 +22,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.bookstore.domain.Book;
 import com.bookstore.domain.User;
 import com.bookstore.domain.security.PasswordResetToken;
 import com.bookstore.domain.security.Role;
 import com.bookstore.domain.security.UserRole;
+import com.bookstore.service.BookService;
 import com.bookstore.service.UserService;
 import com.bookstore.service.impl.UserSecurityService;
 import com.bookstore.utility.MailConstructor;
 import com.bookstore.utility.SecurityUtility;
 
 @Controller
-public class HomeController {
+public class HomeController {	
 	
 	@Autowired
 	private UserService userService;
@@ -44,6 +47,9 @@ public class HomeController {
 	
 	@Autowired
 	private MailConstructor mailConstructor;
+	
+	@Autowired
+	private BookService bookService;
 
 	@RequestMapping("/")
 	public String index() {
@@ -173,5 +179,14 @@ public class HomeController {
 		model.addAttribute("user", user);
 		model.addAttribute("classActiveEdit", true);
 		return "myProfile";
+	}
+	
+	@RequestMapping("/bookshelf")
+	public String bookShelf(Model model) {
+		List<Book> bookList = bookService.findAll();
+		User user = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		model.addAttribute("user", user);
+		model.addAttribute("bookList", bookList);
+		return "bookShelf";
 	}
 }
