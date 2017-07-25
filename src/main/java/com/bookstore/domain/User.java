@@ -2,6 +2,7 @@ package com.bookstore.domain;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -37,6 +38,13 @@ public class User implements UserDetails{
 	private String phone;
 	private boolean enabled=true;
 
+	@OneToMany(cascade=CascadeType.ALL, mappedBy="user")
+	private List<UserShipping> userShippingList;
+
+	@OneToMany(cascade=CascadeType.ALL, mappedBy="user")
+	private List<UserPayment> userPaymentList;
+	
+
 //	If the relationship is bidirectional, the mappedBy element must be used to specify the relationship field or property of the entity that is the owner of the relationship.
 //  The OneToMany annotation may be used within an embeddable class contained within an entity class to specify a relationship to a collection of entities. If the relationship is bidirectional, the mappedBy element must be used to specify the relationship field or property of the entity that is the owner of the relationship.
 //	cascadeType ALL means - whether operation is propogated to chain of this mapping. here, Mapping between users and roles. i.e. If we work on this user object and if userRoles property changes, then changes will be propogated to userRoles DB as well. and ALL means all operations will be propogated
@@ -46,6 +54,19 @@ public class User implements UserDetails{
 	private Set<UserRole> userRoles = new HashSet<>();
 	
 	
+	
+	public List<UserShipping> getUserShippingList() {
+		return userShippingList;
+	}
+	public void setUserShippingList(List<UserShipping> userShippingList) {
+		this.userShippingList = userShippingList;
+	}
+	public List<UserPayment> getUserPaymentList() {
+		return userPaymentList;
+	}
+	public void setUserPaymentList(List<UserPayment> userPaymentList) {
+		this.userPaymentList = userPaymentList;
+	}
 	public long getId() {
 		return id;
 	}

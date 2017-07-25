@@ -46,7 +46,7 @@
 												th:src="#{adminPath}+@{/images/book/}+${book.id}+'.png'" /></a>
 										</div>
 										<div class="col-xs-9" >
-											<a th:href="@{/bookDetail?id=}+${book.id}">
+											<a th:href="@{/bookDetail(id=${book.id})}">
 											<h4 th:text="${book.title}"></h4>
 											</a> 
 											<span

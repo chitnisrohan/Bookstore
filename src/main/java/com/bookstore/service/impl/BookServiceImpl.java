@@ -19,4 +19,9 @@ public class BookServiceImpl implements BookService{
 		return (List <Book>)bookRepository.findAll();
 	}
 
+	@Override
+	public Book findById(Long id) {
+		return bookRepository.findOne(id);
+	}
+
 }
