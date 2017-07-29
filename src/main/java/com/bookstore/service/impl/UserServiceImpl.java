@@ -1,26 +1,41 @@
 package com.bookstore.service.impl;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
+
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.bookstore.domain.ShoppingCart;
 import com.bookstore.domain.User;
+import com.bookstore.domain.UserBilling;
+import com.bookstore.domain.UserPayment;
+import com.bookstore.domain.UserShipping;
 import com.bookstore.domain.security.PasswordResetToken;
 import com.bookstore.domain.security.UserRole;
 import com.bookstore.repository.PasswordResetTokenRepository;
 import com.bookstore.repository.RoleRepository;
+import com.bookstore.repository.UserPaymentRepository;
 import com.bookstore.repository.UserRepository;
+import com.bookstore.repository.UserShippingRepository;
 import com.bookstore.service.UserService;
 
 @Service
 public class UserServiceImpl implements UserService{
+	
+	@Autowired
+	private UserShippingRepository userShippingRepository;
 
 	@Autowired
 	private PasswordResetTokenRepository passwordResetTokenRepository;
 
+	@Autowired
+	private UserPaymentRepository userPaymentRepository;
 	
 	@Autowired
 	private RoleRepository roleRepository;
@@ -52,6 +67,7 @@ public class UserServiceImpl implements UserService{
 	}
 	
 	@Override
+	@Transactional
 	public User createUser(User user, Set<UserRole> userRoles) throws Exception{
 		User user1 = userRepository.findByUsername(user.getUsername());
 		if(user1 != null) {
@@ -62,6 +78,15 @@ public class UserServiceImpl implements UserService{
 			}
 			
 			user.getUserRoles().addAll(userRoles);
+			
+			ShoppingCart shoppingCart = new ShoppingCart();
+			shoppingCart.setUser(user);
+			user.setShoppingCart(shoppingCart);
+			
+			user.setUserShippingList(new ArrayList<UserShipping>());
+			user.setUserPaymentList(new ArrayList<UserPayment>());
+			
+			
 			user1 = userRepository.save(user);
 		}
 		
@@ -71,5 +96,53 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public User save(User user) {
 		return userRepository.save(user);
+	}
+
+	@Override
+	public void updateUserBilling(UserBilling userBilling, UserPayment userPayment, User user) {
+		userPayment.setUser(user);
+		userPayment.setUserBilling(userBilling);
+		userPayment.setDefaultPayment(true);
+		userBilling.setUserPayment(userPayment);
+		user.getUserPaymentList().add(userPayment);
+		save(user);
+	}
+
+	@Override
+	public void setUserDefaultPayment(Long defaultUserPaymentId, User user) {
+		List<UserPayment> userPaymentList = (List<UserPayment>)userPaymentRepository.findAll();
+		
+		for (UserPayment userPayment : userPaymentList) {
+			if (userPayment.getId() == defaultUserPaymentId) {
+				userPayment.setDefaultPayment(true);
+				userPaymentRepository.save(userPayment);
+			} else {
+				userPayment.setDefaultPayment(false);
+				userPaymentRepository.save(userPayment);
+			}
+		}
+	}
+
+	@Override
+	public void updateUserShipping(UserShipping userShipping, User user) {
+		userShipping.setUser(user);
+		userShipping.setUserShippingDefault(true);
+		user.getUserShippingList().add(userShipping);
+		save(user);
+	}
+
+	@Override
+	public void setUserDefaultShipping(Long defaultShippingId, User user) {
+		List<UserShipping> userShippingList = (List<UserShipping>)userShippingRepository.findAll();
+		
+		for (UserShipping userShipping : userShippingList) {
+			if (userShipping.getId() == defaultShippingId) {
+				userShipping.setUserShippingDefault(true);
+				userShippingRepository.save(userShipping);
+			} else {
+				userShipping.setUserShippingDefault(false);
+				userShippingRepository.save(userShipping);
+			}
+		}
 	}
 }

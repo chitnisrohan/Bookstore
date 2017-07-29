@@ -15,12 +15,12 @@
 				</h2>
 			</div>
 			<div class="col-xs-4">
-				<img src="/image/logo.png" class="img-responsive" />
+				<img src="/images/bookstore_logo.jpg" class="img-responsive" />
 			</div>
 		</div>
 		<hr
 			style="position: absolute; width: 100%; height: 6px; background-color: #333; z-index: -1; margin-top: -80px;" />
-		<img class="img-responsive" src="/image/wood.png"
+		<img class="img-responsive" src="/images/wood.png"
 			style="margin-top: -75px;" />
 
 		<div class="row" style="margin-top: 60px;">
@@ -50,7 +50,7 @@
 									style="background-color: #ededed; margin-top: 20px;">
 
 									<div class="alert alert-danger" th:if="${incorrectPassword}">
-										<strong>Incorrect Password!</strong> Pleae enter the correct
+										<strong>Incorrect Password!</strong> Please enter the correct
 										password for the current user.
 									</div>
 
@@ -330,7 +330,21 @@
 											<button class="btn btn-primary" type="submit">Save</button>
 										</form>
 									</div>
+								<!-- 
+								'name' attribute is simply used to differentiate one input tag from another. 
+								It is used to allot name to a particular input which is later used to reference it. The name attribute is used to reference elements in a JavaScript, 
+								or to reference form data after a form is submitted. 
+								Only form elements with a name attribute will have their values passed when submitting a form.
 
+								'value' attribute specifies the value for input element.  
+								The value attribute is used differently for different input types:
+
+								For "button", "reset", and "submit" - it defines the text on the button
+								For "text", "password", and "hidden" - it defines the initial (default) value of the input field
+								For "checkbox", "radio", "image" - it defines the value associated with the input (this is also the value that is sent on submit)
+								
+								 -->	
+								
 									<div th:if="${addNewCreditCard}">
 										<form th:action="@{addNewCreditCard}" method="post">
 											<div class="bg-info" th:if="${updateUserPaymentInfo}">User
@@ -410,7 +424,7 @@
 											</div>
 											<div class="row">
 												<div class="col-xs-12">
-													<img src="/image/creditcard.png" class="img-responsive" /><br />
+													<img src="/images/creditcard.png" class="img-responsive" /><br />
 													<div class="form-group">
 														<label for="cardType">* Select Card Type:</label> <select
 															class="form-control" id="cardType" th:name="type"
