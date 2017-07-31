@@ -39,6 +39,22 @@ public class ShoppingCartServiceImpl implements ShoppingCartService{
 		return shoppingCart;
 		
 	}
+
+	@Override
+	public void clearShoppingCart(ShoppingCart shoppingCart) {
+		List<CartItem> cartItemList = cartItemService.findByShoppingCart(shoppingCart);
+		
+//		we just removing cart item from shopping cart. we still need cartItem as we have relationship
+//		with Order
+		for (CartItem cartItem : cartItemList) {
+			cartItem.setShoppingCart(null);
+			cartItemService.save(cartItem);
+		}
+		
+		shoppingCart.setGrandTotal(new BigDecimal(0));
+		
+		shoppingCartRepository.save(shoppingCart);
+	}
 	
 
 }

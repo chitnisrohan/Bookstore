@@ -27,6 +27,7 @@ import com.bookstore.domain.UserPayment;
 import com.bookstore.domain.UserShipping;
 import com.bookstore.service.BillingAddressService;
 import com.bookstore.service.CartItemService;
+import com.bookstore.service.OrderService;
 //import com.bookstore.service.OrderService;
 import com.bookstore.service.PaymentService;
 import com.bookstore.service.ShippingAddressService;
@@ -43,12 +44,9 @@ public class CheckoutController {
 	private ShippingAddress shippingAddress = new ShippingAddress();
 	private BillingAddress billingAddress = new BillingAddress();
 	private Payment payment = new Payment();
-
-	@Autowired
-	private JavaMailSender mailSender;
 	
 	@Autowired
-	private MailConstructor mailConstructor;
+	private OrderService orderService;
 	
 	@Autowired
 	private UserService userService;
@@ -58,12 +56,21 @@ public class CheckoutController {
 	
 	@Autowired
 	private ShoppingCartService shoppingCartService;
-
+	
+	@Autowired
+	private JavaMailSender mailSender;
+	
 	@Autowired
 	private ShippingAddressService shippingAddressService;
 
 	@Autowired
 	private BillingAddressService billingAddressService;
+
+	
+	@Autowired
+	private MailConstructor mailConstructor;
+
+
 
 	@Autowired
 	private PaymentService paymentService;
@@ -194,11 +201,11 @@ public class CheckoutController {
 		
 		User user = userService.findByUsername(principal.getName());
 		
-//		Order order = orderService.createOrder(shoppingCart, shippingAddress, billingAddress, payment, shippingMethod, user);
+		Order order = orderService.createOrder(shoppingCart, shippingAddress, billingAddress, payment, shippingMethod, user);
 		
-//		mailSender.send(mailConstructor.constructOrderConfirmationEmail(user, order, Locale.ENGLISH));
+		mailSender.send(mailConstructor.constructOrderConfirmationEmail(user, order, Locale.ENGLISH));
 		
-//		shoppingCartService.clearShoppingCart(shoppingCart);
+		shoppingCartService.clearShoppingCart(shoppingCart);
 		
 		LocalDate today = LocalDate.now();
 		LocalDate estimatedDeliveryDate;
