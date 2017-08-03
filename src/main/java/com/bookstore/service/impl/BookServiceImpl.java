@@ -24,4 +24,14 @@ public class BookServiceImpl implements BookService{
 		return bookRepository.findOne(id);
 	}
 
+	@Override
+	public List<Book> findByCategory(String category) {
+		return bookRepository.findByCategory(category);
+	}
+
+	@Override
+	public List<Book> blurrySearch(String keyword) {
+		return bookRepository.findByTitleContaining(keyword);
+	}
+
 }

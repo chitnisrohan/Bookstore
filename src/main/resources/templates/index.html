@@ -9,7 +9,7 @@
     </div>
 
     <div class="container" id="rc-body-container">
-        <div class="row">
+        <div class="row banner">
 
             <div class="col-xs-8">
                 <div class="panel panel-default">
@@ -79,14 +79,18 @@
             <div class="col-xs-4">
                 <div class="panel panel-default">
                     <div class="panel-body">
-                        <img src="/images/hours.png" class="img-responsive" />
+	                    <a th:href="@{/hours}">
+    	                    <img src="/images/hours.png" class="img-responsive" />
+                        </a>
                     </div>
                 </div>
             </div>
             <div class="col-xs-4">
                 <div class="panel panel-default">
                     <div class="panel-body">
-                        <img src="/images/faq.png" class="img-responsive" />
+                    	<a th:href="@{/faq}">
+                        	<img src="/images/faq.png" class="img-responsive" />
+                    	</a>
                     </div>
                 </div>
             </div>
@@ -115,16 +119,41 @@
                                     <img class="img-responsive" src="/images/book1.png" />
                                 </div>
                                 <div class="col-xs-2">
-                                    <img class="img-responsive" src="/images/book1.png" />
+                                    <img class="img-responsive" th:src="#{adminPath}+'/images/book/2.png'" />
                                 </div>
                                 <div class="col-xs-2">
-                                    <img class="img-responsive" src="/images/book1.png" />
+                                    <img class="img-responsive" th:src="#{adminPath}+'/images/book/3.png'"/>
                                 </div>
                                 <div class="col-xs-2">
-                                    <img class="img-responsive" src="/images/book1.png" />
+                                    <img class="img-responsive" th:src="#{adminPath}+'/images/book/3.png'" />
                                 </div>
                                 <div class="col-xs-2">
-                                    <img class="img-responsive" src="/images/book1.png" />
+                                    <img class="img-responsive" th:src="#{adminPath}+'/images/book/4.png'" />
+                                </div>
+                                <div class="col-xs-2">
+                                    <img class="img-responsive" th:src="#{adminPath}+'/images/book/5.png'" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <img src="/images/shelf.png" class="img-responsive" />
+                        <div class="carousel-caption">
+                            <div class="row">
+                                <div class="col-xs-2">
+                                    <img class="img-responsive" th:src="#{adminPath}+'/images/book/6.png'" />
+                                </div>
+                                <div class="col-xs-2">
+                                    <img class="img-responsive" th:src="#{adminPath}+'/images/book/7.png'" />
+                                </div>
+                                <div class="col-xs-2">
+                                    <img class="img-responsive" th:src="#{adminPath}+'/images/book/8.png'" />
+                                </div>
+                                <div class="col-xs-2">
+                                    <img class="img-responsive" th:src="#{adminPath}+'/images/book/10.png'" />
+                                </div>
+                                <div class="col-xs-2">
+                                    <img class="img-responsive" th:src="#{adminPath}+'/images/book/9.png'" />
                                 </div>
                                 <div class="col-xs-2">
                                     <img class="img-responsive" src="/images/book1.png" />
@@ -140,38 +169,13 @@
                                     <img class="img-responsive" src="/images/book1.png" />
                                 </div>
                                 <div class="col-xs-2">
-                                    <img class="img-responsive" src="/images/book1.png" />
+                                    <img class="img-responsive" th:src="#{adminPath}+'/images/book/11.png'" />
                                 </div>
                                 <div class="col-xs-2">
-                                    <img class="img-responsive" src="/images/book1.png" />
+                                    <img class="img-responsive" th:src="#{adminPath}+'/images/book/13.png'" />
                                 </div>
                                 <div class="col-xs-2">
-                                    <img class="img-responsive" src="/images/book1.png" />
-                                </div>
-                                <div class="col-xs-2">
-                                    <img class="img-responsive" src="/images/book1.png" />
-                                </div>
-                                <div class="col-xs-2">
-                                    <img class="img-responsive" src="/images/book1.png" />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="item">
-                        <img src="/images/shelf.png" class="img-responsive" />
-                        <div class="carousel-caption">
-                            <div class="row">
-                                <div class="col-xs-2">
-                                    <img class="img-responsive" src="/images/book1.png" />
-                                </div>
-                                <div class="col-xs-2">
-                                    <img class="img-responsive" src="/images/book1.png" />
-                                </div>
-                                <div class="col-xs-2">
-                                    <img class="img-responsive" src="/images/book1.png" />
-                                </div>
-                                <div class="col-xs-2">
-                                    <img class="img-responsive" src="/images/book1.png" />
+                                    <img class="img-responsive" th:src="#{adminPath}+'/images/book/12.png'" />
                                 </div>
                                 <div class="col-xs-2">
                                     <img class="img-responsive" src="/images/book1.png" />
@@ -202,6 +206,7 @@
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
+    <div th:replace="common/header :: footer"/>
     <div th:replace="common/header :: body-bottom-scripts"></div>
 </body>
 
